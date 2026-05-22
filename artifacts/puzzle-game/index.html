@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- ── Mobile / Capacitor viewport ────────────────────────────────────────
+         user-scalable=no prevents double-tap zoom on tiles.
+         viewport-fit=cover extends into notch/punch-hole safe areas.         -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+
+    <title>Puzzle X</title>
+    <meta name="description" content="200-level sliding puzzle game with coins, achievements, and cloud save." />
+    <meta name="application-name" content="Puzzle X" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- ── PWA / Add to Home Screen ──────────────────────────────────────────-->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Puzzle X" />
+    <meta name="theme-color" content="#0a0814" />
+
+    <!-- ── Android immersive fullscreen ─────────────────────────────────────
+         Capacitor reads these to configure WindowInsetsController.           -->
+    <meta name="msapplication-navbutton-color" content="#0a0814" />
+
+    <!-- ── Open Graph ────────────────────────────────────────────────────────-->
+    <meta property="og:title" content="Puzzle X" />
+    <meta property="og:description" content="200-level sliding puzzle with coins, XP, achievements, and cloud save." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Puzzle X" />
+    <meta name="twitter:description" content="200-level sliding puzzle with coins, XP, achievements, and cloud save." />
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- ── Fonts ─────────────────────────────────────────────────────────────
+         preconnect cuts DNS lookup time on first load.                       -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Touch / scroll optimisations ─────────────────────────────────────
+         Overscroll and callout are disabled so the game board feels native.  -->
+    <style>
+      html, body {
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        touch-action: pan-x pan-y;
+        /* Safe area insets for notch / punch-hole phones */
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+      /* Promote animated elements to their own GPU layer to prevent jank */
+      .tile-gpu {
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="src/main.tsx"></script>
+
+    <!-- ── Service Worker registration ──────────────────────────────────────
+         Registers the offline-capable service worker for web / PWA.
+         Capacitor on Android uses its own WebView caching — this is a no-op
+         inside the APK but harmless to include.                             -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

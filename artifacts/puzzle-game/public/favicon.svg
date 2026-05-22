@@ -1,0 +1,55 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="100%" stop-color="#0a0814"/>
+    </linearGradient>
+    <linearGradient id="tileGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#be185d"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#7c3aed" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="180" height="180" rx="36" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="90" y1="22" x2="90" y2="158" stroke="rgba(167,139,250,0.08)" stroke-width="1"/>
+  <line x1="22" y1="90" x2="158" y2="90" stroke="rgba(167,139,250,0.08)" stroke-width="1"/>
+
+  <!-- Puzzle tiles (2×2 grid with gap, one missing bottom-right) -->
+  <!-- Top-left tile -->
+  <rect x="28" y="28" width="55" height="55" rx="12" fill="url(#tileGrad)" filter="url(#shadow)"/>
+  <!-- Top highlight on tile -->
+  <rect x="28" y="28" width="55" height="16" rx="12" fill="rgba(255,255,255,0.18)"/>
+  <rect x="28" y="36" width="55" height="8" rx="0" fill="rgba(255,255,255,0.04)"/>
+
+  <!-- Top-right tile -->
+  <rect x="97" y="28" width="55" height="55" rx="12" fill="url(#tileGrad)" filter="url(#shadow)"/>
+  <rect x="97" y="28" width="55" height="16" rx="12" fill="rgba(255,255,255,0.18)"/>
+  <rect x="97" y="36" width="55" height="8" rx="0" fill="rgba(255,255,255,0.04)"/>
+
+  <!-- Bottom-left tile -->
+  <rect x="28" y="97" width="55" height="55" rx="12" fill="url(#accentGrad)" filter="url(#shadow)"/>
+  <rect x="28" y="97" width="55" height="16" rx="12" fill="rgba(255,255,255,0.18)"/>
+  <rect x="28" y="105" width="55" height="8" rx="0" fill="rgba(255,255,255,0.04)"/>
+
+  <!-- Bottom-right: empty slot (dashed border) -->
+  <rect x="97" y="97" width="55" height="55" rx="12" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.25)" stroke-width="2" stroke-dasharray="6 4"/>
+
+  <!-- "X" lettermark on empty slot for branding -->
+  <text x="124.5" y="133" text-anchor="middle" dominant-baseline="middle"
+        font-family="system-ui, -apple-system, sans-serif" font-weight="900"
+        font-size="28" fill="url(#tileGrad)" filter="url(#glow)" opacity="0.85">X</text>
+</svg>

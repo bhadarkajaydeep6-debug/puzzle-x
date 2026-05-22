@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "d5yxJo6f2rGZmOhvN0Lnw"
+uri = "file://artifacts/puzzle-game/ANDROID_BUILD.md"
+type = "text"
+title = "Puzzle X — Android Build Guide"

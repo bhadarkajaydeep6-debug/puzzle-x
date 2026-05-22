@@ -1,0 +1,18 @@
+{
+  "name": "Puzzle X",
+  "short_name": "Puzzle X",
+  "description": "200-level sliding puzzle game with coins, XP, achievements, and cloud save.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0814",
+  "theme_color": "#0a0814",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
