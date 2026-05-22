@@ -24,7 +24,9 @@ jobs:
           version: latest
 
       - name: Install Dependencies
-        run: pnpm install
+        run: |
+          pnpm install --ignore-scripts
+          pnpm install
 
       - name: Build Web App
         run: pnpm run build
