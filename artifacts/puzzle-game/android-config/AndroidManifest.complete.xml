@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ─── Puzzle X — Complete AndroidManifest.xml ─────────────────────────────────
+  This is the COMPLETE manifest ready to replace the Capacitor-generated one at:
+    android/app/src/main/AndroidManifest.xml
+
+  Replace the generated file with this one after running `cap add android`.
+  Make sure to update YOUR_ADMOB_APP_ID with your real ca-app-pub-XXXXX~YYYYY
+  before publishing to Google Play Store.
+  ─────────────────────────────────────────────────────────────────────────────
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ── Permissions ──────────────────────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- AdMob: required for personalised ads and ATT compliance -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+    <!-- Haptics -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- ── Application ──────────────────────────────────────────────────────── -->
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- ── Main Activity ─────────────────────────────────────────────────── -->
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTask"
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Deep link scheme for Capacitor -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/custom_url_scheme" />
+            </intent-filter>
+        </activity>
+
+        <!-- ── AdMob App ID ─────────────────────────────────────────────────── -->
+        <!--
+            TEST ID below — replace with your real ca-app-pub-XXXXX~YYYYY before
+            publishing. Get it from AdMob Console → Apps → App Settings → App ID.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <!-- ── Delayed app measurement (GDPR compliant) ─────────────────────── -->
+        <meta-data
+            android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
+            android:value="true" />
+
+        <!-- ── File Provider (Capacitor camera/file plugins) ────────────────── -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>
