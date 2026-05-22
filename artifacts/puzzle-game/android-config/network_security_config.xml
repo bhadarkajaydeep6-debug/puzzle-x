@@ -1,0 +1,20 @@
+<!-- android/app/src/main/res/xml/network_security_config.xml
+     Copy this file to the path above after running `cap add android`.
+     It enforces HTTPS for all traffic and allows cleartext only to localhost
+     (needed for Capacitor live-reload during development).                  -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Production: only encrypted traffic -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Development only: allow localhost for Capacitor live-reload server -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain><!-- Android emulator host -->
+    </domain-config>
+</network-security-config>
