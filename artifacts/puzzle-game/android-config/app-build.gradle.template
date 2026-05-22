@@ -1,0 +1,129 @@
+// ─── Puzzle X — app/build.gradle ─────────────────────────────────────────────
+// Place this at: android/app/build.gradle
+// This replaces the Capacitor-generated version with Puzzle X configuration,
+// signing setup, ABI splits for smaller APK sizes, and ProGuard.
+// ─────────────────────────────────────────────────────────────────────────────
+
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.puzzlex.game"
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId "com.puzzlex.game"
+        minSdkVersion 23          // Android 6.0 — required by AdMob
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0.0"
+
+        // Enable MultiDex for large dependency trees (AdMob + Capacitor)
+        multiDexEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+            // Compress all assets
+            cruncherEnabled true
+        }
+    }
+
+    // ── Signing Configuration ────────────────────────────────────────────────
+    // Set env vars before building:
+    //   KEYSTORE_FILE  — path to puzzle-x-release.jks
+    //   KEYSTORE_PASS  — keystore password
+    //   KEY_ALIAS      — key alias (e.g. puzzlex)
+    //   KEY_PASS       — key password
+    //
+    // Or use GitHub Actions secrets (see .github/workflows/build-android.yml)
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_FILE") ?: "puzzle-x-release.jks")
+            storePassword System.getenv("KEYSTORE_PASS") ?: ""
+            keyAlias System.getenv("KEY_ALIAS") ?: "puzzlex"
+            keyPassword System.getenv("KEY_PASS") ?: ""
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles(
+                getDefaultProguardFile('proguard-android-optimize.txt'),
+                'proguard-rules.pro'
+            )
+        }
+    }
+
+    // ── ABI Splits (smaller per-architecture APKs) ───────────────────────────
+    // This creates separate APKs for each CPU architecture.
+    // Google Play serves users the right one, reducing install size by ~50%.
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+            universalApk true        // also emit a fat APK for sideloading
+        }
+    }
+
+    // ── APK version codes for split APKs ─────────────────────────────────────
+    ext.abiCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86_64': 3]
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def abiFilter = output.getFilter(com.android.build.OutputFile.ABI)
+            def abiVersionCode = project.ext.abiCodes.get(abiFilter)
+            if (abiVersionCode != null) {
+                output.versionCodeOverride = variant.versionCode * 10 + abiVersionCode
+            }
+        }
+    }
+
+    // ── Build optimisations ───────────────────────────────────────────────────
+    packagingOptions {
+        resources {
+            excludes += [
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE',
+                'META-INF/LICENSE.txt',
+                'META-INF/NOTICE',
+                'META-INF/NOTICE.txt',
+            ]
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    // Capacitor core
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':capacitor-android')
+
+    // AndroidX
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Google Play Services Ads (AdMob)
+    implementation 'com.google.android.gms:play-services-ads:23.0.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
