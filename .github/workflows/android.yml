@@ -20,10 +20,9 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: npm install
-
+        run: pnpm install
       - name: Build Web App
-        run: npm run build
+        run: pnpm run build
 
       - name: Build APK
         run: |
