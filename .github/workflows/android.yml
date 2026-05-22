@@ -2,48 +2,57 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main, master]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Repo checkout karo
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      # Step 2: Node.js setup karo
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '18'
 
+      # Step 3: Dependencies install karo (legacy flag se errors nahi aayenge)
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
+      # Step 4: Web app build karo
       - name: Build Web App
         run: npm run build
 
+      # Step 5: Capacitor Android sync karo
       - name: Sync Capacitor Android
         run: npx cap sync android
 
+      # Step 6: Java setup karo (Android build ke liye zaroori)
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          java-version: '17'
+          distribution: 'temurin'
 
+      # Step 7: Gradle ko executable banao
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
+
+      # Step 8: APK build karo
       - name: Build APK
-        run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
 
+      # Step 9: APK upload karo (download kar sakte ho GitHub se)
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: puzzle-x-apk
+          name: MyGame-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          
+          retention-days: 7
